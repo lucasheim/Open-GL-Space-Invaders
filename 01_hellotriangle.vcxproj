@@ -19,7 +19,13 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Alien.cpp" />
+    <ClCompile Include="AlienCrab.cpp" />
+    <ClCompile Include="AlienDead.cpp" />
+    <ClCompile Include="AlienOctopus.cpp" />
+    <ClCompile Include="AlienSquid.cpp" />
     <ClCompile Include="Buffer.cpp" />
+    <ClCompile Include="Game.cpp" />
     <ClCompile Include="shaders.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Sprite.cpp" />
@@ -29,7 +35,16 @@
     <None Include="vertex_shader.vs" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Alien.h" />
+    <ClInclude Include="AlienCrab.h" />
+    <ClInclude Include="AlienDead.h" />
+    <ClInclude Include="AlienOctopus.h" />
+    <ClInclude Include="AlienSquid.h" />
     <ClInclude Include="Buffer.h" />
+    <ClInclude Include="BulletSprite.h" />
+    <ClInclude Include="Game.h" />
+    <ClInclude Include="GameConfig.h" />
+    <ClInclude Include="PlayerSprite.h" />
     <ClInclude Include="shaders.h" />
     <ClInclude Include="Sprite.h" />
   </ItemGroup>

@@ -22,21 +22,21 @@ void Buffer::drawText(const Sprite& textSpritesheet, const char* text, size_t x,
 		char character = *charp - 32;
 		if (character < 0 || character >= 65) continue;
 		sprite.data = textSpritesheet.data + character * stride;
-		this->drawSprite(sprite, xp, y, color);
+		//this->drawSprite(sprite, xp, y, color);
 		xp += sprite.width + 1;
 	}
 }
 
-void Buffer::drawSprite(const Sprite& sprite, size_t x, size_t y, uint32_t color) {
-	for (size_t xi = 0; xi < sprite.width; ++xi)
+void Buffer::drawSprite(const Sprite* sprite, size_t x, size_t y, uint32_t color) {
+	for (size_t xi = 0; xi < sprite->width; ++xi)
 	{
-		for (size_t yi = 0; yi < sprite.height; ++yi)
+		for (size_t yi = 0; yi < sprite->height; ++yi)
 		{
-			if (sprite.data[yi * sprite.width + xi] &&
-				(sprite.height - 1 + y - yi) < this->height &&
+			if (sprite->data[yi * sprite->width + xi] &&
+				(sprite->height - 1 + y - yi) < this->height &&
 				(x + xi) < this->width)
 			{
-				this->data[(sprite.height - 1 + y - yi) * this->width + (x + xi)] = color;
+				this->data[(sprite->height - 1 + y - yi) * this->width + (x + xi)] = color;
 			}
 		}
 	}
@@ -56,7 +56,7 @@ void Buffer::drawNumber(const Sprite& numberSpritesheet, size_t number, size_t x
 	for (size_t i = 0; i < numDigits; ++i) {
 		uint8_t digit = digits[numDigits - i - 1];
 		sprite.data = numberSpritesheet.data + digit * stride;
-		this->drawSprite(sprite, xp, y, color);
+		//this->drawSprite(sprite, xp, y, color);
 		xp += sprite.width + 1;
 	}
 }

@@ -5,9 +5,13 @@
 #include "shaders.h"
 #include "Buffer.h"
 #include "Sprite.h"
+#include "PlayerSprite.h"
+#include "BulletSprite.h"
+#include "GameConfig.h"
+#include "Game.h"
+#include "Alien.h"
 
 #define APPLICATION_NAME "Space Invaders"
-#define GAME_MAX_BULLETS 128
 #define FRAGMENT_SHADER_PATH "fragment_shader.fs"
 #define VERTEX_SHADER_PATH "vertex_shader.vs"
 
@@ -27,43 +31,6 @@ enum AlienType : uint8_t
 	ALIEN_TYPE_C = 3
 };
 
-struct Alien
-{
-	size_t x, y;
-	uint8_t type;
-};
-
-struct Player
-{
-	size_t x, y;
-	size_t life;
-};
-
-struct Bullet
-{
-	size_t x, y;
-	int dir;
-};
-
-struct Game
-{
-	size_t width, height;
-	size_t numAliens;
-	size_t numBullets;
-	Alien* aliens;
-	Player player;
-	Bullet bullets[GAME_MAX_BULLETS];
-};
-
-struct SpriteAnimation
-{
-	bool loop;
-	size_t numFrames;
-	size_t frameDuration;
-	size_t time;
-	Sprite** frames;
-};
-
 // Shader Functions
 GLuint generateShaders();
 void attachShader(GLuint shaderProgram, const GLchar* shader, int type);
@@ -73,12 +40,6 @@ bool validateProgram(GLuint program);
 // Callbacks
 void errorCallback(int error, const char* description);
 void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
-
-// Buffer functions
-void bufferColorClear(Buffer* buffer, uint32_t color);
-void bufferDrawSprite(Buffer* buffer, const Sprite& sprite, size_t x, size_t y, uint32_t color);
-void bufferDrawNumber(Buffer* buffer, const Sprite& numberSpritesheet, size_t number, size_t x, size_t y, uint32_t color);
-void bufferDrawText(Buffer* buffer, const Sprite& textSpritesheet, const char* text, size_t x, size_t y, uint32_t color);
 
 // Sprite functions
 bool spriteOverlapCheck(const Sprite& sp_a, size_t x_a, size_t y_a, const Sprite& sp_b, size_t x_b, size_t y_b);
@@ -112,11 +73,11 @@ int main(int argc, char* argv[])
 		return -1;
 	}
 
-	// Create graphics buffer
+	// Create buffer and fill it with color
 	Buffer* buffer = new Buffer(bufferWidth, bufferHeight);
 	buffer->colorClear(0);
 
-	// Create texture for presenting buffer to OpenGL
+	// Create texture
 	GLuint bufferTexture;
 	glGenTextures(1, &bufferTexture);
 	glBindTexture(GL_TEXTURE_2D, bufferTexture);
@@ -249,31 +210,7 @@ int main(int argc, char* argv[])
 		0,1,0,0,1,0,0,0,1,0,0,1,0  // .@..@...@..@.
 	});
 
-	SpriteAnimation alienAnimation[3];
-	for (size_t i = 0; i < 3; ++i)
-	{
-		alienAnimation[i].loop = true;
-		alienAnimation[i].numFrames = 2;
-		alienAnimation[i].frameDuration = 10;
-		alienAnimation[i].time = 0;
-		alienAnimation[i].frames = new Sprite*[2];
-		alienAnimation[i].frames[0] = alienSprites[2 * i];
-		alienAnimation[i].frames[1] = alienSprites[2 * i + 1];
-	}
-
-	Sprite playerSprite;
-	playerSprite.width = 11;
-	playerSprite.height = 7;
-	playerSprite.data = new uint8_t[77]
-	{
-		0,0,0,0,0,1,0,0,0,0,0, // .....@.....
-		0,0,0,0,1,1,1,0,0,0,0, // ....@@@....
-		0,0,0,0,1,1,1,0,0,0,0, // ....@@@....
-		0,1,1,1,1,1,1,1,1,1,0, // .@@@@@@@@@.
-		1,1,1,1,1,1,1,1,1,1,1, // @@@@@@@@@@@
-		1,1,1,1,1,1,1,1,1,1,1, // @@@@@@@@@@@
-		1,1,1,1,1,1,1,1,1,1,1, // @@@@@@@@@@@
-	};
+	Sprite* playerSprite = new PlayerSprite(11, 7);
 
 	Sprite* textSpritesheet = new Sprite(5,7);
 	textSpritesheet->setData(new uint8_t[65 * 35]
@@ -353,38 +290,11 @@ int main(int argc, char* argv[])
 	numberSpritesheet.data += 16 * 35;
 
 
-	Sprite* bulletSprite = new Sprite(1, 3);
-	bulletSprite->setData(new uint8_t[3]{ 1,1,1 });
+	Sprite* bulletSprite = new BulletSprite();
 
-	Game game;
-	game.width = bufferWidth;
-	game.height = bufferHeight;
-	game.numBullets = 0;
-	game.numAliens = 55;
-	game.aliens = new Alien[game.numAliens];
+	Game* game = new Game(bufferWidth, bufferHeight);
 
-	game.player.x = 112 - 5;
-	game.player.y = 32;
-
-	game.player.life = 3;
-
-	
-	// Create alien matrix
-	for (size_t yi = 0; yi < 5; ++yi) {
-		for (size_t xi = 0; xi < 11; ++xi) {
-			Alien& alien = game.aliens[yi * 11 + xi];
-			alien.type = (5 - yi) / 2 + 1;
-			const Sprite& sprite = *alienSprites[2 * (alien.type - 1)];
-			alien.x = 16 * xi + 20 + (alienDeathSprite->width - sprite.width) / 2;
-			alien.y = 17 * yi + 128;
-		}
-	}
-
-	uint8_t* deathCounters = new uint8_t[game.numAliens];
-	for (size_t i = 0; i < game.numAliens; ++i) {
-		// 10 so they can have some dying time
-		deathCounters[i] = 10;
-	}
+	game->createAlienMatrix();
 
 	uint32_t backgroundColor = rgbToUint32(0, 0, 0);
 
@@ -394,6 +304,9 @@ int main(int argc, char* argv[])
 	gameIsRunning = true;
 	while (!glfwWindowShouldClose(window) && gameIsRunning)
 	{
+
+		// TODO: Move everything to Game Class
+		// Alien sons just have the sprites different. Is inheritance the best way to do this? (maybe it is)
 		buffer->colorClear(backgroundColor);
 
 		// Draw credits
@@ -402,45 +315,39 @@ int main(int argc, char* argv[])
 		buffer->drawText(*textSpritesheet, creditsText, 164, 7, rgbToUint32(255, 255, 255));
 
 		// Draw score
-		buffer->drawText(*textSpritesheet, "SCORE", 4, game.height - textSpritesheet->height - 7, rgbToUint32(255, 255, 255));
-		buffer->drawNumber(numberSpritesheet, score, 4 + 2 * numberSpritesheet.width, game.height - 2 * numberSpritesheet.height - 12, rgbToUint32(255, 255, 255));
+		buffer->drawText(*textSpritesheet, "SCORE", 4, game->height - textSpritesheet->height - 7, rgbToUint32(255, 255, 255));
+		buffer->drawNumber(numberSpritesheet, score, 4 + 2 * numberSpritesheet.width, game->height - 2 * numberSpritesheet.height - 12, rgbToUint32(255, 255, 255));
 	
 
 		// For each alien
-		for (size_t ai = 0; ai < game.numAliens; ++ai) {
-			// if it's not already fully dead
-			if (!deathCounters[ai]) continue;
-			const Alien& alien = game.aliens[ai];
+		for (size_t ai = 0; ai < game->numAliens; ++ai) {
+			Alien* alien = game->aliens[ai];
+			// If deathCounter = 0, then do nothing and go to next alien (continue)
+			if (!alien->deathCounter) continue;
 			// if it got killed, draw death sprite
-			if (alien.type == ALIEN_DEAD) {
-				buffer->drawSprite(*alienDeathSprite, alien.x, alien.y, rgbToUint32(255, 255, 255));
+			if (alien->dead) {
+				buffer->drawSprite(alienDeathSprite, alien->x, alien->y, rgbToUint32(255, 255, 255));
 			}
 			// else, change sprite (animation)
 			else {
-				const SpriteAnimation& animation = alienAnimation[alien.type - 1];
-				size_t currentFrame = animation.time / animation.frameDuration;
-				const Sprite& sprite = *animation.frames[currentFrame];
-				buffer->drawSprite(sprite, alien.x, alien.y, rgbToUint32(255, 255, 255));
+				Sprite* sprite = alien->getNextSprite();
+				buffer->drawSprite(sprite, alien->x, alien->y, rgbToUint32(255, 255, 255));
+				alien->animation.time++;
+				if (alien->animation.time == alien->animation.numFrames * alien->animation.frameDuration) {
+					alien->animation.time = 0;
+				}
 			}
 		}
 
 		// draw bullets on screen
-		for (size_t bi = 0; bi < game.numBullets; ++bi) {
-			const Bullet& bullet = game.bullets[bi];
+		for (size_t bi = 0; bi < game->numBullets; ++bi) {
+			const Bullet& bullet = game->bullets[bi];
 			const Sprite& sprite = *bulletSprite;
-			buffer->drawSprite(sprite, bullet.x, bullet.y, rgbToUint32(255, 255, 255));
+			//buffer->drawSprite(sprite, bullet.x, bullet.y, rgbToUint32(255, 255, 255));
 		}
 
 		// Draw player
-		buffer->drawSprite(playerSprite, game.player.x, game.player.y, rgbToUint32(255, 255, 255));
-
-		// increment alien animation
-		for (size_t i = 0; i < 3; ++i) {
-			++alienAnimation[i].time;
-			if (alienAnimation[i].time == alienAnimation[i].numFrames * alienAnimation[i].frameDuration) {
-				alienAnimation[i].time = 0;
-			}
-		}
+		buffer->drawSprite(playerSprite, game->player.x, game->player.y, rgbToUint32(255, 255, 255));
 
 		// fill texture with data from the buffer;
 		glTexSubImage2D(
@@ -457,43 +364,42 @@ int main(int argc, char* argv[])
 
 		// ALIENS
 		// Decrease deathcounter
-		for (size_t ai = 0; ai < game.numAliens; ++ai) {
-			const Alien& alien = game.aliens[ai];
-			if (alien.type == ALIEN_DEAD && deathCounters[ai]) {
-				--deathCounters[ai];
+		for (size_t ai = 0; ai < game->numAliens; ++ai) {
+			Alien* alien = game->aliens[ai];
+			if (false && alien->deathCounter) {
+				alien->decreaseDeathCounter();
 			}
 		}
 
 		// BULLETS
 		// Add next X and Y of its movement
-		for (size_t bi = 0; bi < game.numBullets;) {
-			game.bullets[bi].y += game.bullets[bi].dir;
+		for (size_t bi = 0; bi < game->numBullets;) {
+			game->bullets[bi].y += game->bullets[bi].dir;
 			// Border check
-			if (game.bullets[bi].y >= game.height || game.bullets[bi].y < bulletSprite->height) {
-				game.bullets[bi] = game.bullets[game.numBullets - 1];
-				--game.numBullets;
+			if (game->bullets[bi].y >= game->height || game->bullets[bi].y < bulletSprite->height) {
+				game->bullets[bi] = game->bullets[game->numBullets - 1];
+				--game->numBullets;
 				continue;
 			}
 
 			// Check if hit an alien
-			for (size_t ai = 0; ai < game.numAliens; ++ai) {
-				const Alien& alien = game.aliens[ai];
-				if (alien.type == ALIEN_DEAD) continue;
-				const SpriteAnimation& animation = alienAnimation[alien.type - 1];
+			for (size_t ai = 0; ai < game->numAliens; ++ai) {
+				const Alien* alien = game->aliens[ai];
+				if (false) continue;
+				const SpriteAnimation& animation = alien->animation;
 				size_t currentFrame = animation.time / animation.frameDuration;
 				const Sprite& alienSprite = *animation.frames[currentFrame];
 				bool overlap = spriteOverlapCheck(
-					*bulletSprite, game.bullets[bi].x, game.bullets[bi].y,
-					alienSprite, alien.x, alien.y
+					*bulletSprite, game->bullets[bi].x, game->bullets[bi].y,
+					alienSprite, alien->x, alien->y
 				);
 				// If it hits, increase score and change alien type to dead
 				if (overlap) {
-					score += 10 * (4 - game.aliens[ai].type);
-					game.aliens[ai].type = ALIEN_DEAD;
+					score += 10 * (4);
 					// Adjust alien sprite X so the animation is centralized
-					game.aliens[ai].x -= (alienDeathSprite->width - alienSprite.width) / 2;
-					game.bullets[bi] = game.bullets[game.numBullets - 1];
-					--game.numBullets;
+					game->aliens[ai]->x -= (alienDeathSprite->width - alienSprite.width) / 2;
+					game->bullets[bi] = game->bullets[game->numBullets - 1];
+					--game->numBullets;
 					continue;
 				}
 			}
@@ -505,23 +411,23 @@ int main(int argc, char* argv[])
 
 		// If it's not pressing both keys
 		if (playerMovementDirection != 0) {
-			if (game.player.x + playerSprite.width + playerMovementDirection >= game.width) {
-				game.player.x = game.width - playerSprite.width;
+			if (game->player.x + playerSprite->width + playerMovementDirection >= game->width) {
+				game->player.x = game->width - playerSprite->width;
 			}
-			else if ((int)game.player.x + playerMovementDirection <= 0) {
-				game.player.x = 0;
+			else if ((int)game->player.x + playerMovementDirection <= 0) {
+				game->player.x = 0;
 			}
 			else {
-				game.player.x += playerMovementDirection;
+				game->player.x += playerMovementDirection;
 			}
 		}
 
 		// Process events
-		if (firePressed && game.numBullets < GAME_MAX_BULLETS) {
-			game.bullets[game.numBullets].x = game.player.x + playerSprite.width / 2;
-			game.bullets[game.numBullets].y = game.player.y + playerSprite.height;
-			game.bullets[game.numBullets].dir = 2;
-			++game.numBullets;
+		if (firePressed && game->numBullets < GAME_MAX_BULLETS) {
+			game->bullets[game->numBullets].x = game->player.x + playerSprite->width / 2;
+			game->bullets[game->numBullets].y = game->player.y + playerSprite->height;
+			game->bullets[game->numBullets].dir = 2;
+			++game->numBullets;
 		}
 		firePressed = false;
 
@@ -539,17 +445,10 @@ int main(int argc, char* argv[])
 	}
 	delete[] alienDeathSprite->data;
 
-	// Clear alien animations
-	for (size_t i = 0; i < 3; ++i)
-	{
-		delete[] alienAnimation[i].frames;
-	}
-
 	// Clear all data
 	delete[] textSpritesheet->data;
 	delete[] buffer->data;
-	delete[] game.aliens;
-	delete[] deathCounters;
+	delete[] game->aliens;
 
 	return 0;
 }
@@ -644,66 +543,6 @@ void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods
 	}
 }
 
-/*-----------------------------------------
-	BUFFER FUNCTIONS
------------------------------------------*/
-void bufferColorClear(Buffer* buffer, uint32_t color) {
-	for (size_t i = 0; i < buffer->width * buffer->height; ++i)
-	{
-		buffer->data[i] = color;
-	}
-}
-
-void bufferDrawSprite(Buffer* buffer, const Sprite& sprite, size_t x, size_t y, uint32_t color) {
-	for (size_t xi = 0; xi < sprite.width; ++xi)
-	{
-		for (size_t yi = 0; yi < sprite.height; ++yi)
-		{
-			if (sprite.data[yi * sprite.width + xi] &&
-				(sprite.height - 1 + y - yi) < buffer->height &&
-				(x + xi) < buffer->width)
-			{
-				buffer->data[(sprite.height - 1 + y - yi) * buffer->width + (x + xi)] = color;
-			}
-		}
-	}
-}
-
-void bufferDrawNumber(Buffer* buffer, const Sprite& numberSpritesheet, size_t number, size_t x, size_t y, uint32_t color) {
-	uint8_t digits[64];
-	size_t numDigits = 0;
-	size_t currentNumber = number;
-	do
-	{
-
-		digits[numDigits++] = currentNumber % 10;
-		currentNumber = currentNumber / 10;
-	} while (currentNumber > 0);
-	size_t xp = x;
-	size_t stride = numberSpritesheet.width * numberSpritesheet.height;
-	Sprite sprite = numberSpritesheet;
-	for (size_t i = 0; i < numDigits; ++i)
-	{
-		uint8_t digit = digits[numDigits - i - 1];
-		sprite.data = numberSpritesheet.data + digit * stride;
-		bufferDrawSprite(buffer, sprite, xp, y, color);
-		xp += sprite.width + 1;
-	}
-}
-
-void bufferDrawText(Buffer* buffer, const Sprite& textSpritesheet, const char* text, size_t x, size_t y, uint32_t color) {
-	size_t xp = x;
-	size_t stride = textSpritesheet.width * textSpritesheet.height;
-	Sprite sprite = textSpritesheet;
-	for (const char* charp = text; *charp != '\0'; ++charp)
-	{
-		char character = *charp - 32;
-		if (character < 0 || character >= 65) continue;
-		sprite.data = textSpritesheet.data + character * stride;
-		bufferDrawSprite(buffer, sprite, xp, y, color);
-		xp += sprite.width + 1;
-	}
-}
 
 /*-----------------------------------------
 	SPRITE FUNCTIONS
