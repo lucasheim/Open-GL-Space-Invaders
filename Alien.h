@@ -20,5 +20,6 @@ public:
 
 	void decreaseDeathCounter();
 	Sprite* getNextSprite();
+	Sprite* getDeathSprite();
 };
 
