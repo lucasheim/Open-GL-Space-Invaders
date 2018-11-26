@@ -12,10 +12,6 @@
 #include "Formatter.h"
 #include "Player.h"
 
-#define APPLICATION_NAME "Space Invaders"
-#define FRAGMENT_SHADER_PATH "fragment_shader.fs"
-#define VERTEX_SHADER_PATH "vertex_shader.vs"
-
 bool gameIsRunning = false;
 int movementDirection = 0;
 bool firePressed = false;
@@ -236,28 +232,12 @@ int main(int argc, char* argv[])
 		// PLAYER
 		int playerMovementDirection = 2 * movementDirection;
 
-		// If it's not pressing both keys
-		if (playerMovementDirection != 0) {
-			if (game->player->x + playerSprite->width + playerMovementDirection >= game->width) {
-				game->player->x = game->width - playerSprite->width;
-			}
-			else if ((int)game->player->x + playerMovementDirection <= 0) {
-				game->player->x = 0;
-			}
-			else {
-				game->player->x += playerMovementDirection;
-			}
-		}
+		game->updatePlayer(playerMovementDirection);
 
-		// Process events
-		if (firePressed && game->numBullets < GAME_MAX_BULLETS) {
-			int x = game->player->x + playerSprite->width / 2;
-			int y = game->player->y + playerSprite->height;
-			int dir = 2;
-			game->bullets[game->numBullets] = new Bullet(x, y, dir);
-			++game->numBullets;
+		if (firePressed) {
+			game->createPlayerBullet();
+			firePressed = false;
 		}
-		firePressed = false;
 
 		glfwPollEvents();
 	}

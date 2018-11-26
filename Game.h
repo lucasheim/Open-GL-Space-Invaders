@@ -27,5 +27,7 @@ public:
 	void drawPlayer();
 	void decreaseDeathCounters();
 	void updateBullets();
+	void updatePlayer(int movementDirection);
+	void createPlayerBullet();
 };
 

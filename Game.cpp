@@ -96,6 +96,29 @@ void Game::updateBullets() {
 	}
 }
 
+void Game::updatePlayer(int movementDirection) {
+	if (movementDirection != 0) {
+		if (this->player->x + this->player->getSprite()->width + movementDirection >= this->width) {
+			this->player->x = this->width - this->player->getSprite()->width;
+		}
+		else if ((int)this->player->x + movementDirection <= 0) {
+			this->player->x = 0;
+		}
+		else {
+			this->player->x += movementDirection;
+		}
+	}
+}
+
+void Game::createPlayerBullet() {
+	if (this->numBullets < GAME_MAX_BULLETS) {
+		int bulletX = this->player->x + this->player->getSprite()->width / 2;
+		int bulletY = this->player->y + this->player->getSprite()->height;
+		int direction = 2;
+		this->bullets[this->numBullets++] = new Bullet(bulletX, bulletY, direction);
+	}
+}
+
 bool Game::spriteOverlapCheck(const Sprite& sp_a, size_t x_a, size_t y_a, const Sprite& sp_b, size_t x_b, size_t y_b) {
 	if (x_a < x_b + sp_b.width && x_a + sp_a.width > x_b &&
 		y_a < y_b + sp_b.height && y_a + sp_a.height > y_b)
