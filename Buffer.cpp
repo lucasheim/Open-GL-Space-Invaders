@@ -27,16 +27,13 @@ void Buffer::drawText(const Sprite& textSpritesheet, const char* text, size_t x,
 	}
 }
 
-void Buffer::drawSprite(const Sprite* sprite, size_t x, size_t y, uint32_t color) {
-	for (size_t xi = 0; xi < sprite->width; ++xi)
-	{
-		for (size_t yi = 0; yi < sprite->height; ++yi)
-		{
-			if (sprite->data[yi * sprite->width + xi] &&
-				(sprite->height - 1 + y - yi) < this->height &&
-				(x + xi) < this->width)
-			{
-				this->data[(sprite->height - 1 + y - yi) * this->width + (x + xi)] = color;
+void Buffer::drawSprite(const Sprite* sprite, size_t startingX, size_t startingY, uint32_t color) {
+	for (int x = 0; x < sprite->width; ++x) {
+		for (int y = 0; y < sprite->height; ++y) {
+			if (sprite->data[y * sprite->width + x] &&
+				(sprite->height - 1 + startingY - y) < this->height &&
+				(startingX + x) < this->width) {
+				this->data[(sprite->height - 1 + startingY - y) * this->width + (startingX + x)] = color;
 			}
 		}
 	}

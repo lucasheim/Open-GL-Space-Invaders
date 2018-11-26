@@ -27,8 +27,8 @@ void Game::updateAliens() {
 				buffer->drawSprite(alien->getDeathSprite(), alien->x, alien->y, Formatter::rgbToUint32(255, 255, 255));
 			}
 			else {
-				Sprite* sprite = alien->getNextSprite();
-				buffer->drawSprite(sprite, alien->x, alien->y, Formatter::rgbToUint32(255, 255, 255));
+				alien->draw(this->buffer);
+				// TODO: Move this logic inside Alien
 				alien->animation.time++;
 				if (alien->animation.time == alien->animation.numFrames * alien->animation.frameDuration) {
 					alien->animation.time = 0;
@@ -52,9 +52,7 @@ void Game::drawPlayer() {
 void Game::decreaseDeathCounters() {
 	for (int i = 0; i < this->numAliens; i++) {
 		Alien* alien = this->aliens[i];
-		if (alien->dead && alien->deathCounter) {
-			alien->decreaseDeathCounter();
-		}
+		alien->decreaseDeathCounter();
 	}
 }
 

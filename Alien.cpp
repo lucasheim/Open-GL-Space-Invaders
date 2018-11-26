@@ -1,7 +1,9 @@
 #include "Alien.h"
 
 void Alien::decreaseDeathCounter() {
-	this->deathCounter--;
+	if (this->dead && this->deathCounter) {
+		this->deathCounter--;
+	}
 }
 
 Sprite* Alien::getNextSprite() {

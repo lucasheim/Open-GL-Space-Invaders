@@ -47,6 +47,7 @@
     <ClInclude Include="Formatter.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameConfig.h" />
+    <ClInclude Include="IDrawable.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PlayerSprite.h" />
     <ClInclude Include="shaders.h" />

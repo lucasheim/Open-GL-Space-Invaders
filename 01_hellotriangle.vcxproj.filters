@@ -29,6 +29,7 @@
     <ClInclude Include="Formatter.h" />
     <ClInclude Include="Bullet.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="IDrawable.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="fragment_shader.fs" />

@@ -1,5 +1,6 @@
 #pragma once
 #include "Sprite.h"
+#include "IDrawable.h"
 
 struct SpriteAnimation
 {
@@ -9,7 +10,7 @@ struct SpriteAnimation
 	Sprite** frames;
 };
 
-class Alien
+class Alien : public IDrawable
 {
 public:
 	size_t x, y, width, height;
@@ -17,7 +18,9 @@ public:
 	bool dead;
 	Sprite* sprites[2];
 	SpriteAnimation animation;
+	uint32_t color;
 
+	virtual void draw(Buffer* buffer) = 0;
 	void decreaseDeathCounter();
 	Sprite* getNextSprite();
 	Sprite* getDeathSprite();
