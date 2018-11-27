@@ -25,3 +25,17 @@ Sprite* Player::getSprite() {
 void Player::draw(Buffer* buffer) {
 	buffer->drawSprite(this->getSprite(), this->x, this->y, this->color);
 }
+
+void Player::move(int movementDirection, int limit) {
+	if (movementDirection != 0) {
+		if (this->x + this->width + movementDirection >= limit) {
+			this->x = limit - this->width;
+		}
+		else if ((int)this->x + movementDirection <= 0) {
+			this->x = 0;
+		}
+		else {
+			this->x += movementDirection;
+		}
+	}
+}

@@ -10,5 +10,6 @@ public:
 	Player(size_t x, size_t y, size_t life);
 	Sprite* getSprite();
 	void draw(Buffer* buffer);
+	void move(int movementDirection, int limit);
 };
 

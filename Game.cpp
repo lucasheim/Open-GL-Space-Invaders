@@ -85,18 +85,7 @@ void Game::updateBullets() {
 }
 
 void Game::updatePlayer(int movementDirection) {
-	// TODO move this to player class
-	if (movementDirection != 0) {
-		if (this->player->x + this->player->getSprite()->width + movementDirection >= this->width) {
-			this->player->x = this->width - this->player->getSprite()->width;
-		}
-		else if ((int)this->player->x + movementDirection <= 0) {
-			this->player->x = 0;
-		}
-		else {
-			this->player->x += movementDirection;
-		}
-	}
+	this->player->move(movementDirection, this->width);
 }
 
 void Game::createPlayerBullet() {
