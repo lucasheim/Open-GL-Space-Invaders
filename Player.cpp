@@ -1,6 +1,6 @@
 #include "Player.h"
 
-Player::Player(size_t x, size_t y, size_t life) {
+Player::Player(int x, int y, int life) {
 	this->x = x;
 	this->y = y;
 	this->life = life;

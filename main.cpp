@@ -212,6 +212,7 @@ int main(int argc, char* argv[])
 		glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 		glfwSwapBuffers(window);
 		
+		game->enemyFire();
 		game->updateDeathCounters();
 		game->updateBullets();
 

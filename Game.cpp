@@ -66,6 +66,23 @@ void Game::updateBullets() {
 			continue;
 		}
 
+		if (bullet->dir == ENEMY_BULLET_DIRECTION) {
+			Player* player = this->player;
+			if (bullet->x == this->player->x) {
+				numBullets = numBullets;
+			}
+			bool overlap = this->spriteOverlapCheck(bullet, player);
+
+			if (overlap) {
+				this->bullets[i] = this->bullets[this->numBullets - 1];
+				--this->numBullets;
+				continue;
+			}
+
+			i++;
+			continue;
+		}
+
 		for (int j = 0; j < this->numAliens; j++) {
 			Alien* alien = this->aliens[j];
 			if (alien->hasBeenShot()) continue;
@@ -95,6 +112,21 @@ void Game::createPlayerBullet() {
 		int direction = PLAYER_BULLET_DIRECTION;
 		this->bullets[this->numBullets] = new Bullet(bulletX, bulletY, direction);
 		this->numBullets++;
+	}
+}
+
+void Game::enemyFire() {
+	if (this->numBullets == GAME_MAX_BULLETS) return;
+
+	for (int i = 0; i < this->numAliens; i++) {
+		Alien* alien = this->aliens[i];
+		if (rand() % 100000 < 5) {
+			int bulletX = alien->x + alien->width / 2;
+			int bulletY = alien->y;
+			int direction = ENEMY_BULLET_DIRECTION;
+			this->bullets[this->numBullets] = new Bullet(bulletX, bulletY, direction);
+			this->numBullets++;
+		}
 	}
 }
 

@@ -7,6 +7,7 @@
 #include "Bullet.h"
 #include "Player.h"
 #include "AlienFactory.h"
+#include <stdlib.h> 
 
 class Game
 {
@@ -34,5 +35,6 @@ public:
 	void updateBullets();
 	void updatePlayer(int movementDirection);
 	void createPlayerBullet();
+	void enemyFire();
 };
 
