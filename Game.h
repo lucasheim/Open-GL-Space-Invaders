@@ -6,6 +6,7 @@
 #include "Formatter.h"
 #include "Bullet.h"
 #include "Player.h"
+#include "AlienFactory.h"
 
 class Game
 {

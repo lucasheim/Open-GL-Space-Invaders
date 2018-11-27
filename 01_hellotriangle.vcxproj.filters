@@ -8,11 +8,11 @@
     <ClCompile Include="AlienCrab.cpp" />
     <ClCompile Include="AlienSquid.cpp" />
     <ClCompile Include="AlienOctopus.cpp" />
-    <ClCompile Include="AlienDead.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Alien.cpp" />
     <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="AlienFactory.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Buffer.h" />
@@ -22,7 +22,6 @@
     <ClInclude Include="AlienCrab.h" />
     <ClInclude Include="AlienSquid.h" />
     <ClInclude Include="AlienOctopus.h" />
-    <ClInclude Include="AlienDead.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Alien.h" />
     <ClInclude Include="GameConfig.h" />
@@ -30,6 +29,7 @@
     <ClInclude Include="Bullet.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="IDrawable.h" />
+    <ClInclude Include="AlienFactory.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="fragment_shader.fs" />

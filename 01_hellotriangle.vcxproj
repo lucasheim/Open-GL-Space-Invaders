@@ -21,7 +21,7 @@
   <ItemGroup>
     <ClCompile Include="Alien.cpp" />
     <ClCompile Include="AlienCrab.cpp" />
-    <ClCompile Include="AlienDead.cpp" />
+    <ClCompile Include="AlienFactory.cpp" />
     <ClCompile Include="AlienOctopus.cpp" />
     <ClCompile Include="AlienSquid.cpp" />
     <ClCompile Include="Buffer.cpp" />
@@ -39,7 +39,7 @@
   <ItemGroup>
     <ClInclude Include="Alien.h" />
     <ClInclude Include="AlienCrab.h" />
-    <ClInclude Include="AlienDead.h" />
+    <ClInclude Include="AlienFactory.h" />
     <ClInclude Include="AlienOctopus.h" />
     <ClInclude Include="AlienSquid.h" />
     <ClInclude Include="Buffer.h" />

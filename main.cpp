@@ -16,14 +16,6 @@ bool gameIsRunning = false;
 int movementDirection = 0;
 bool firePressed = false;
 
-enum AlienType : uint8_t
-{
-	ALIEN_DEAD = 0,
-	ALIEN_TYPE_A = 1,
-	ALIEN_TYPE_B = 2,
-	ALIEN_TYPE_C = 3
-};
-
 // Shader Functions
 GLuint generateShaders();
 void attachShader(GLuint shaderProgram, const GLchar* shader, int type);

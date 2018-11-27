@@ -1,10 +1,12 @@
 #include "AlienOctopus.h"
+#include "Alien.h"
 
 AlienOctopus::AlienOctopus(size_t x, size_t y) {
 	this->x = x;
 	this->y = y;
-	this->height = 12;
-	this->width = 8;
+	this->height = 8;
+	this->width = 12;
+	this->animation.frames = this->sprites;
 	this->sprites[0] = new Sprite(12, 8);
 	this->sprites[1] = new Sprite(12, 8);
 
@@ -29,4 +31,8 @@ AlienOctopus::AlienOctopus(size_t x, size_t y) {
 		0,1,1,0,0,1,1,0,0,1,1,0, // .@@..@@..@@.
 		0,0,1,1,0,0,0,0,1,1,0,0  // ..@@....@@..
 	});
+}
+
+int AlienOctopus::getScore() {
+	return 20;
 }
