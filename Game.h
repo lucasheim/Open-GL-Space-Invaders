@@ -16,8 +16,9 @@ class Game
 	Buffer* buffer;
 	Player* player;
 	Bullet** bullets;
+	int score;
 
-	bool spriteOverlapCheck(const Sprite& sp_a, size_t x_a, size_t y_a, const Sprite& sp_b, size_t x_b, size_t y_b);
+	bool spriteOverlapCheck(IDrawable* sprite1, IDrawable* sprite2);
 	void createAlienMatrix();
 
 public:
@@ -28,7 +29,7 @@ public:
 	void updateAliens();
 	void drawBullets();
 	void drawPlayer();
-	void decreaseDeathCounters();
+	void updateDeathCounters();
 	void updateBullets();
 	void updatePlayer(int movementDirection);
 	void createPlayerBullet();

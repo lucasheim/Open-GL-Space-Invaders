@@ -47,7 +47,7 @@ void Game::drawPlayer() {
 	this->player->draw(this->buffer);
 }
 
-void Game::decreaseDeathCounters() {
+void Game::updateDeathCounters() {
 	for (int i = 0; i < this->numAliens; i++) {
 		Alien* alien = this->aliens[i];
 		alien->updateDeathCounter();
@@ -56,34 +56,25 @@ void Game::decreaseDeathCounters() {
 
 void Game::updateBullets() {
 	for (int i = 0; i < this->numBullets;) {
-		// create method that moves the bullet and returns false if it hits a wall (should this be a BULLET responsability?)
-		this->bullets[i]->y += this->bullets[i]->dir;
+		Bullet* bullet = this->bullets[i];
+		bullet->move();
 		// Border Check
-		if (this->bullets[i]->y >= this->height || this->bullets[i]->y < this->bullets[i]->getSprite()->height) {
-			this->bullets[i] = this->bullets[this->numBullets - 1];
-			--this->numBullets;
+		if (bullet->y >= this->height || //passed top border
+			bullet->y <  bullet->height) //passed bottom border
+		{
+			this->bullets[i] = this->bullets[--this->numBullets];
 			continue;
 		}
 
 		for (int j = 0; j < this->numAliens; j++) {
 			Alien* alien = this->aliens[j];
-			if (alien->shot) continue;
-			SpriteAnimation& animation = alien->animation;
-			size_t currentFrame = animation.time / animation.frameDuration;
-			Sprite& alienSprite = *animation.frames[currentFrame];
-			bool overlap = this->spriteOverlapCheck(
-				*this->bullets[i]->getSprite(),
-				this->bullets[i]->x,
-				this->bullets[i]->y,
-				alienSprite,
-				alien->x,
-				alien->y
-			);
+			if (alien->hasBeenShot()) continue;
+			bool overlap = this->spriteOverlapCheck(bullet, alien);
 
 			if (overlap) {
-				// this.score += 10 * (4);
+				this->score += alien->getScore();
 				alien->shot = true;
-				alien->x -= (alien->getDeathSprite()->width - alienSprite.width) / 2;
+				alien->x -= (alien->getDeathSprite()->width - alien->width) / 2;
 				this->bullets[i] = this->bullets[this->numBullets - 1];
 				--this->numBullets;
 				continue;
@@ -113,13 +104,22 @@ void Game::createPlayerBullet() {
 		int bulletX = this->player->x + this->player->getSprite()->width / 2;
 		int bulletY = this->player->y + this->player->getSprite()->height;
 		int direction = 2;
-		this->bullets[this->numBullets++] = new Bullet(bulletX, bulletY, direction);
+		this->bullets[this->numBullets] = new Bullet(bulletX, bulletY, direction);
+		this->numBullets++;
 	}
 }
 
-bool Game::spriteOverlapCheck(const Sprite& sp_a, size_t x_a, size_t y_a, const Sprite& sp_b, size_t x_b, size_t y_b) {
-	if (x_a < x_b + sp_b.width && x_a + sp_a.width > x_b &&
-		y_a < y_b + sp_b.height && y_a + sp_a.height > y_b) {
+bool Game::spriteOverlapCheck(IDrawable* sprite1, IDrawable* sprite2) {
+	size_t x1 = sprite1->x;
+	size_t x2 = sprite2->x;
+	size_t y1 = sprite1->y;
+	size_t y2 = sprite2->y;
+	size_t w1 = sprite1->width;
+	size_t w2 = sprite2->width;
+	size_t h1 = sprite1->height;
+	size_t h2 = sprite2->height;
+	if (x1 < (x2 + w2) && (x1 + w1) > x2 &&
+		y1 < (y2 + h2) && (y1 + h1) > y2) {
 		return true;
 	}
 	return false;

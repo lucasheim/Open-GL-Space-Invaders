@@ -3,7 +3,8 @@
 Bullet::Bullet(size_t x, size_t y, int dir) {
 	this->x = x;
 	this->y = y;
-	this->heigth = 3;
+	this->width = 1;
+	this->height = 3;
 	this->dir = dir;
 }
 
@@ -19,4 +20,8 @@ Sprite* Bullet::getSprite() {
 
 void Bullet::draw(Buffer* buffer) {
 	buffer->drawSprite(this->getSprite(), this->x, this->y, this->color);
+}
+
+void Bullet::move() {
+	this->y += this->dir;
 }

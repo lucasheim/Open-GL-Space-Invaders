@@ -220,7 +220,7 @@ int main(int argc, char* argv[])
 		glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 		glfwSwapBuffers(window);
 		
-		game->decreaseDeathCounters();
+		game->updateDeathCounters();
 		game->updateBullets();
 
 		int playerMovementDirection = 2 * movementDirection;

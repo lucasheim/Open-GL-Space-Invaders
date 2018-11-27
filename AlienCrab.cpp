@@ -4,8 +4,8 @@
 AlienCrab::AlienCrab(size_t x, size_t y) {
 	this->x = x;
 	this->y = y;
-	this->height = 11;
-	this->width = 8;
+	this->height = 8;
+	this->width = 11;
 	this->animation.frames = this->sprites;
 	this->sprites[0] = new Sprite(11,  8);
 	this->sprites[1] = new Sprite(11,  8);
@@ -31,4 +31,8 @@ AlienCrab::AlienCrab(size_t x, size_t y) {
 		0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0,  // ..@.....@..
 		0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0   // .@.......@.
 	});
+}
+
+int AlienCrab::getScore() {
+	return 40;
 }

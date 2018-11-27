@@ -13,10 +13,8 @@ struct SpriteAnimation
 	Sprite** frames;
 };
 
-class Alien : public IDrawable
-{
+class Alien : public IDrawable {
 public:
-	size_t x, y, width, height;
 	int deathCounter = 10;
 	bool shot = false;
 	Sprite* sprites[2];
@@ -29,10 +27,11 @@ public:
 	
 	void draw(Buffer* buffer);
 	void drawDeath(Buffer* buffer);
-	void decreaseDeathCounter();
+	void updateDeathCounter();
 	Sprite* getNextSprite();
 	Sprite* getDeathSprite();
 	bool hasBeenShot();
 	bool isDead();
+	virtual int getScore() = 0;
 };
 
