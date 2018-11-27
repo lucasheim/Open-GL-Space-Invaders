@@ -9,8 +9,6 @@
 
 class Game
 {
-	bool spriteOverlapCheck(const Sprite& sp_a, size_t x_a, size_t y_a, const Sprite& sp_b, size_t x_b, size_t y_b);
-public:
 	size_t width, height;
 	size_t numAliens;
 	size_t numBullets;
@@ -19,9 +17,14 @@ public:
 	Player* player;
 	Bullet** bullets;
 
+	bool spriteOverlapCheck(const Sprite& sp_a, size_t x_a, size_t y_a, const Sprite& sp_b, size_t x_b, size_t y_b);
+	void createAlienMatrix();
+
+public:
 	Game(Buffer* buffer);
 
-	void createAlienMatrix();
+	void setup();
+	void paintBackground(uint32_t color);
 	void updateAliens();
 	void drawBullets();
 	void drawPlayer();

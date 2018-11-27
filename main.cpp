@@ -104,8 +104,6 @@ int main(int argc, char* argv[])
 	#pragma endregion
 
 	
-	Sprite* playerSprite = new PlayerSprite(11, 7);
-
 	Sprite* textSpritesheet = new Sprite(5,7);
 	textSpritesheet->setData(new uint8_t[65 * 35]
 	{
@@ -185,9 +183,7 @@ int main(int argc, char* argv[])
 
 	Game* game = new Game(buffer);
 
-	game->createAlienMatrix();
-
-	uint32_t backgroundColor = Formatter::rgbToUint32(0, 0, 0);
+	game->setup();
 
 	glfwSwapInterval(1);
 
@@ -195,8 +191,7 @@ int main(int argc, char* argv[])
 	gameIsRunning = true;
 	while (!glfwWindowShouldClose(window) && gameIsRunning)
 	{
-
-		game->buffer->colorClear(backgroundColor);
+		game->paintBackground(BLACK_UINT32);
 
 		//Credits and score down here
 		/* CREDITS/SCORE THINGS
@@ -215,23 +210,20 @@ int main(int argc, char* argv[])
 		game->drawBullets();
 		game->drawPlayer();
 
-		// fill texture with data from the buffer;
+		// Fill texture with buffer data and draw it on the screen
 		glTexSubImage2D(
 			GL_TEXTURE_2D, 0, 0, 0,
 			buffer->width, buffer->height,
 			GL_RGBA, GL_UNSIGNED_INT_8_8_8_8,
 			buffer->data
 		);
-		// Draw fullscreen triangle
 		glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 		glfwSwapBuffers(window);
 		
 		game->decreaseDeathCounters();
 		game->updateBullets();
 
-		// PLAYER
 		int playerMovementDirection = 2 * movementDirection;
-
 		game->updatePlayer(playerMovementDirection);
 
 		if (firePressed) {
@@ -239,6 +231,7 @@ int main(int argc, char* argv[])
 			firePressed = false;
 		}
 
+		//Poll for events
 		glfwPollEvents();
 	}
 
@@ -254,7 +247,6 @@ int main(int argc, char* argv[])
 
 	return 0;
 }
-
 
 /*-----------------------------------------
 	SHADER FUNCTIONS

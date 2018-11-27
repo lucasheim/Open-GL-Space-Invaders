@@ -1,11 +1,13 @@
 #pragma once
 #include "Sprite.h"
-class Bullet
-{
+#include "IDrawable.h"
+
+class Bullet : public IDrawable{
 public:
-	size_t x, y;
+	size_t x, y, heigth;
 	int dir;
 	Bullet(size_t x, size_t y, int dir);
 	Sprite* getSprite();
+	void draw(Buffer * buffer);
 };
 

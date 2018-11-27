@@ -19,3 +19,7 @@ Sprite* Player::getSprite() {
 	});
 	return sprite;
 }
+
+void Player::draw(Buffer* buffer) {
+	buffer->drawSprite(this->getSprite(), this->x, this->y, this->color);
+}

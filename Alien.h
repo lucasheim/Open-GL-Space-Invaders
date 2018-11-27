@@ -18,7 +18,7 @@ class Alien : public IDrawable
 public:
 	size_t x, y, width, height;
 	int deathCounter = 10;
-	bool dead = false;
+	bool shot = false;
 	Sprite* sprites[2];
 	SpriteAnimation animation = {
 		2, // Frames quantity 
@@ -26,11 +26,13 @@ public:
 		0, // Passed time
 		NULL // Frames Array
 	};
-	uint32_t color = WHITE_UINT32;
-
+	
 	void draw(Buffer* buffer);
+	void drawDeath(Buffer* buffer);
 	void decreaseDeathCounter();
 	Sprite* getNextSprite();
 	Sprite* getDeathSprite();
+	bool hasBeenShot();
+	bool isDead();
 };
 

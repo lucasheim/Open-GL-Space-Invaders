@@ -3,6 +3,7 @@
 Bullet::Bullet(size_t x, size_t y, int dir) {
 	this->x = x;
 	this->y = y;
+	this->heigth = 3;
 	this->dir = dir;
 }
 
@@ -14,4 +15,8 @@ Sprite* Bullet::getSprite() {
 		1	//@
 	});
 	return sprite;
+}
+
+void Bullet::draw(Buffer* buffer) {
+	buffer->drawSprite(this->getSprite(), this->x, this->y, this->color);
 }
