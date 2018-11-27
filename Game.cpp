@@ -101,8 +101,8 @@ void Game::updatePlayer(int movementDirection) {
 
 void Game::createPlayerBullet() {
 	if (this->numBullets < GAME_MAX_BULLETS) {
-		int bulletX = this->player->x + this->player->getSprite()->width / 2;
-		int bulletY = this->player->y + this->player->getSprite()->height;
+		int bulletX = this->player->x + this->player->width / 2;
+		int bulletY = this->player->y + this->player->height;
 		int direction = PLAYER_BULLET_DIRECTION;
 		this->bullets[this->numBullets] = new Bullet(bulletX, bulletY, direction);
 		this->numBullets++;

@@ -4,6 +4,8 @@ Player::Player(size_t x, size_t y, size_t life) {
 	this->x = x;
 	this->y = y;
 	this->life = life;
+	this->width = 11;
+	this->height = 7;
 }
 
 Sprite* Player::getSprite() {
