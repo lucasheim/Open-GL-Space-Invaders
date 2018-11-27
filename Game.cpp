@@ -28,11 +28,6 @@ void Game::updateAliens() {
 			}
 			else {
 				alien->draw(this->buffer);
-				// TODO: Move this logic inside Alien
-				alien->animation.time++;
-				if (alien->animation.time == alien->animation.numFrames * alien->animation.frameDuration) {
-					alien->animation.time = 0;
-				}
 			}
 		}
 	}

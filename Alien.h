@@ -1,6 +1,9 @@
 #pragma once
 #include "Sprite.h"
 #include "IDrawable.h"
+#include "Buffer.h"
+#include "Formatter.h"
+#include "GameConfig.h"
 
 struct SpriteAnimation
 {
@@ -14,13 +17,18 @@ class Alien : public IDrawable
 {
 public:
 	size_t x, y, width, height;
-	int deathCounter;
-	bool dead;
+	int deathCounter = 10;
+	bool dead = false;
 	Sprite* sprites[2];
-	SpriteAnimation animation;
-	uint32_t color;
+	SpriteAnimation animation = {
+		2, // Frames quantity 
+		ALIEN_ANIMATION_DURATION, 
+		0, // Passed time
+		NULL // Frames Array
+	};
+	uint32_t color = WHITE_UINT32;
 
-	virtual void draw(Buffer* buffer) = 0;
+	void draw(Buffer* buffer);
 	void decreaseDeathCounter();
 	Sprite* getNextSprite();
 	Sprite* getDeathSprite();

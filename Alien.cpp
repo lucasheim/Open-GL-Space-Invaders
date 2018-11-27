@@ -24,3 +24,11 @@ Sprite* Alien::getDeathSprite() {
 	});
 	return alienDeathSprite;
 }
+
+void Alien::draw(Buffer* buffer) {
+	buffer->drawSprite(this->getNextSprite(), this->x, this->y, this->color);
+	this->animation.time++;
+	if (this->animation.time == this->animation.numFrames * this->animation.frameDuration) {
+		this->animation.time = 0;
+	}
+}
