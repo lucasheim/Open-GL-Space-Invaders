@@ -5,8 +5,7 @@
 
 class Player : public IDrawable {
 public:
-	int x, y;
-	size_t life;
+	int life;
 	Player(int x, int y, int life);
 	Sprite* getSprite();
 	void draw(Buffer* buffer);

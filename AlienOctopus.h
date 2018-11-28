@@ -8,7 +8,7 @@ class AlienOctopus : public Alien
 {
 public:
 	Sprite* sprites[];
-	AlienOctopus(size_t x, size_t y);
+	AlienOctopus(int x, int y);
 	int getScore();
 };
 

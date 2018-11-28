@@ -8,7 +8,7 @@ class AlienCrab : public Alien
 {
 public:
 	Sprite* sprites[];
-	AlienCrab(size_t x, size_t y);
+	AlienCrab(int x, int y);
 	int getScore();
 };
 

@@ -1,7 +1,7 @@
 #include "AlienSquid.h"
 #include "Alien.h"
 
-AlienSquid::AlienSquid(size_t x, size_t y) {
+AlienSquid::AlienSquid(int x, int y) {
 	this->x = x;
 	this->y = y;
 	this->height = 8;

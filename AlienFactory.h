@@ -7,6 +7,6 @@
 class AlienFactory {
 public:
 	~AlienFactory() {};
-	static Alien* createAlien(size_t line, size_t x, size_t y);
+	static Alien* createAlien(int line, int x, int y);
 };
 

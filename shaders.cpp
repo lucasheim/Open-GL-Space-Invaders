@@ -15,7 +15,7 @@ bool parse_file_into_str(const char *file_name, char *shader_str, int max_len) {
 	if (!file) {
 		return false;
 	}
-	size_t cnt = fread(shader_str, 1, max_len - 1, file);
+	int cnt = fread(shader_str, 1, max_len - 1, file);
 	if ((int)cnt >= max_len - 1) {
 	}
 	if (ferror(file)) {

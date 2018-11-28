@@ -11,9 +11,9 @@
 
 class Game
 {
-	size_t width, height;
-	size_t numAliens;
-	size_t numBullets;
+	int width, height;
+	int numAliens;
+	int numBullets;
 	Alien** aliens;
 	Buffer* buffer;
 	Player* player;

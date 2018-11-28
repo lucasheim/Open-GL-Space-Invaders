@@ -7,9 +7,9 @@
 
 struct SpriteAnimation
 {
-	size_t numFrames;
-	size_t frameDuration;
-	size_t time;
+	int numFrames;
+	int frameDuration;
+	int time;
 	Sprite** frames;
 };
 

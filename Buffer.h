@@ -3,11 +3,11 @@
 #include "Sprite.h"
 class Buffer {
 public:
-	size_t width, height;
+	int width, height;
 	uint32_t* data;
-	Buffer(size_t width, size_t heigth);
+	Buffer(int width, int heigth);
 	void colorClear(uint32_t color);
-	void drawText(const Sprite& textSpritesheet, const char* text, size_t x, size_t y, uint32_t color);
-	void drawSprite(const Sprite* sprite, size_t x, size_t y, uint32_t color);
-	void drawNumber(const Sprite& numberSpritesheet, size_t number, size_t x, size_t y, uint32_t color);
+	void drawText(const Sprite& textSpritesheet, const char* text, int x, int y, uint32_t color);
+	void drawSprite(const Sprite* sprite, int x, int y, uint32_t color);
+	void drawNumber(const Sprite& numberSpritesheet, int number, int x, int y, uint32_t color);
 };

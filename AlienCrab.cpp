@@ -1,7 +1,7 @@
 #include "AlienCrab.h"
 #include "Alien.h"
 
-AlienCrab::AlienCrab(size_t x, size_t y) {
+AlienCrab::AlienCrab(int x, int y) {
 	this->x = x;
 	this->y = y;
 	this->height = 8;

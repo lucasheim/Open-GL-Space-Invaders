@@ -1,6 +1,6 @@
 #include "AlienFactory.h"
 
-Alien * AlienFactory::createAlien(size_t line, size_t x, size_t y) {
+Alien * AlienFactory::createAlien(int line, int x, int y) {
 	switch (line) {
 		case 4:
 			return new AlienOctopus(x, y);

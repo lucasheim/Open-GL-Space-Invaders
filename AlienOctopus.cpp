@@ -1,7 +1,7 @@
 #include "AlienOctopus.h"
 #include "Alien.h"
 
-AlienOctopus::AlienOctopus(size_t x, size_t y) {
+AlienOctopus::AlienOctopus(int x, int y) {
 	this->x = x;
 	this->y = y;
 	this->height = 8;

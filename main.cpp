@@ -28,8 +28,8 @@ void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods
 
 int main(int argc, char* argv[])
 {
-	const size_t bufferWidth = 224;
-	const size_t bufferHeight = 256;
+	const int bufferWidth = 224;
+	const int bufferHeight = 256;
 
 	#pragma region WindowSetup
 

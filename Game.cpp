@@ -120,6 +120,7 @@ void Game::enemyFire() {
 
 	for (int i = 0; i < this->numAliens; i++) {
 		Alien* alien = this->aliens[i];
+		if (alien->isDead()) continue;
 		if (rand() % 100000 < 5) {
 			int bulletX = alien->x + alien->width / 2;
 			int bulletY = alien->y;
@@ -131,14 +132,14 @@ void Game::enemyFire() {
 }
 
 bool Game::spriteOverlapCheck(IDrawable* sprite1, IDrawable* sprite2) {
-	size_t x1 = sprite1->x;
-	size_t x2 = sprite2->x;
-	size_t y1 = sprite1->y;
-	size_t y2 = sprite2->y;
-	size_t w1 = sprite1->width;
-	size_t w2 = sprite2->width;
-	size_t h1 = sprite1->height;
-	size_t h2 = sprite2->height;
+	int x1 = sprite1->x;
+	int x2 = sprite2->x;
+	int y1 = sprite1->y;
+	int y2 = sprite2->y;
+	int w1 = sprite1->width;
+	int w2 = sprite2->width;
+	int h1 = sprite1->height;
+	int h2 = sprite2->height;
 	if (x1 < (x2 + w2) && (x1 + w1) > x2 &&
 		y1 < (y2 + h2) && (y1 + h1) > y2) {
 		return true;

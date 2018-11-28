@@ -3,10 +3,10 @@
 class Sprite
 {
 public:
-	size_t width, height;
+	int width, height;
 	uint8_t* data;
 	Sprite();
-	Sprite(size_t width, size_t height);
+	Sprite(int width, int height);
 	void setData(uint8_t* data);
 };
 

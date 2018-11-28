@@ -2,7 +2,7 @@
 
 Sprite::Sprite(){}
 
-Sprite::Sprite(size_t width, size_t height) {
+Sprite::Sprite(int width, int height) {
 	this->width = width;
 	this->height = height;
 	this->data = new uint8_t[width * height];

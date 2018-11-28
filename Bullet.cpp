@@ -1,6 +1,6 @@
 #include "Bullet.h"
 
-Bullet::Bullet(size_t x, size_t y, int dir) {
+Bullet::Bullet(int x, int y, int dir) {
 	this->x = x;
 	this->y = y;
 	this->width = 1;
