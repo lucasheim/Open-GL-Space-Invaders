@@ -31,6 +31,7 @@ public:
 	void updateAliens();
 	void drawBullets();
 	void drawPlayer();
+	void drawScore();
 	void updateDeathCounters();
 	void updateBullets();
 	void updatePlayer(int movementDirection);

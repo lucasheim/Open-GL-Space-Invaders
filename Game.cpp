@@ -5,6 +5,7 @@ Game::Game(Buffer* buffer) {
 	this->height = buffer->height;
 	this->numAliens = NUM_ALIENS;
 	this->numBullets = 0;
+	this->score = 0;
 	this->aliens = new Alien*[this->numAliens];
 	this->buffer = buffer;
 	this->player = new Player(107, 32, PLAYER_LIFES);
@@ -45,6 +46,10 @@ void Game::drawBullets() {
 
 void Game::drawPlayer() {
 	this->player->draw(this->buffer);
+}
+
+void Game::drawScore() {
+	this->buffer->drawNumber(this->score, 14, 230, WHITE_UINT32);
 }
 
 void Game::updateDeathCounters() {
