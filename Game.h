@@ -8,12 +8,14 @@
 #include "Player.h"
 #include "AlienFactory.h"
 #include <stdlib.h> 
+#include <cstdio>
 
 class Game
 {
 	int width, height;
 	int numAliens;
 	int numBullets;
+	int killedAliens;
 	Alien** aliens;
 	Buffer* buffer;
 	Player* player;
@@ -22,6 +24,8 @@ class Game
 
 	bool spriteOverlapCheck(IDrawable* sprite1, IDrawable* sprite2);
 	void createAlienMatrix();
+	void newAlienWave();
+	void restartGame();
 
 public:
 	Game(Buffer* buffer);

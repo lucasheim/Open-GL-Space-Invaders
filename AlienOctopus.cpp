@@ -34,5 +34,5 @@ AlienOctopus::AlienOctopus(int x, int y) {
 }
 
 int AlienOctopus::getScore() {
-	return 20;
+	return 40;
 }

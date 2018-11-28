@@ -34,5 +34,5 @@ AlienCrab::AlienCrab(int x, int y) {
 }
 
 int AlienCrab::getScore() {
-	return 40;
+	return 20;
 }

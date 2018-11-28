@@ -10,6 +10,7 @@ Game::Game(Buffer* buffer) {
 	this->buffer = buffer;
 	this->player = new Player(107, 32, PLAYER_LIFES);
 	this->bullets = new Bullet*[GAME_MAX_BULLETS];
+	this->killedAliens = 0;
 }
 
 void Game::createAlienMatrix() {
@@ -34,6 +35,9 @@ void Game::updateAliens() {
 		if (!alien->isDead()) {
 			alien->draw(this->buffer);
 		}
+	}
+	if (this->killedAliens > 0 && this->killedAliens % NUM_ALIENS == 0) {
+		this->newAlienWave();
 	}
 }
 
@@ -81,6 +85,7 @@ void Game::updateBullets() {
 			if (overlap) {
 				this->bullets[i] = this->bullets[this->numBullets - 1];
 				--this->numBullets;
+				--this->player->life;
 				continue;
 			}
 
@@ -99,10 +104,14 @@ void Game::updateBullets() {
 				alien->x -= (alien->getDeathSprite()->width - alien->width) / 2;
 				this->bullets[i] = this->bullets[this->numBullets - 1];
 				--this->numBullets;
+				++this->killedAliens;
 				continue;
 			}
 		}
 		i++;
+	}
+	if (!this->player->life) {
+		this->restartGame();
 	}
 }
 
@@ -126,7 +135,7 @@ void Game::enemyFire() {
 	for (int i = 0; i < this->numAliens; i++) {
 		Alien* alien = this->aliens[i];
 		if (alien->isDead()) continue;
-		if (rand() % 100000 < 5) {
+		if (rand() % 1000 * (NUM_ALIENS - killedAliens % NUM_ALIENS) == 0) {
 			int bulletX = alien->x + alien->width / 2;
 			int bulletY = alien->y;
 			int direction = ENEMY_BULLET_DIRECTION;
@@ -134,6 +143,19 @@ void Game::enemyFire() {
 			this->numBullets++;
 		}
 	}
+}
+
+void Game::newAlienWave() {
+		this->createAlienMatrix();
+}
+
+void Game::restartGame() {
+	this->newAlienWave();
+	this->killedAliens = 0;
+	this->score = 0;
+	this->numBullets = 0;
+	this->player->life = PLAYER_LIFES;
+	this->bullets = new Bullet*[GAME_MAX_BULLETS];
 }
 
 bool Game::spriteOverlapCheck(IDrawable* sprite1, IDrawable* sprite2) {

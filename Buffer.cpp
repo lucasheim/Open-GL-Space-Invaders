@@ -131,8 +131,9 @@ void Buffer::drawNumber(int number, int x, int y, uint32_t color) {
 	Sprite* sprite = numberSpritesheet;
 	for (int i = 0; i < numDigits; ++i) {
 		uint8_t digit = digits[numDigits - i - 1];
-		sprite->data = numberSpritesheet->data + digit * stride;
-		this->drawSprite(sprite, xp, y, color);
+		Sprite* digitSprite = new Sprite(5, 7);
+		digitSprite->setData(numberSpritesheet->data + digit * stride);
+		this->drawSprite(digitSprite, xp, y, color);
 		xp += sprite->width + 1;
 	}
 }

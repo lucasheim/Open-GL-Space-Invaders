@@ -107,19 +107,6 @@ int main(int argc, char* argv[])
 	{
 		game->paintBackground(BLACK_UINT32);
 
-		//Credits and score down here
-		/* CREDITS/SCORE THINGS
-		// drawing text is currently not working as I've changed drawSprite method
-		// Draw credits
-		char creditsText[16];
-		sprintf(creditsText, "CREDIT %02lu", credits);
-		buffer->drawText(*textSpritesheet, creditsText, 164, 7, Formatter::rgbToUint32(255, 255, 255));
-
-		// Draw score
-		buffer->drawText(*textSpritesheet, "SCORE", 4, game->height - textSpritesheet->height - 7, Formatter::rgbToUint32(255, 255, 255));
-		buffer->drawNumber(numberSpritesheet, score, 4 + 2 * numberSpritesheet.width, game->height - 2 * numberSpritesheet.height - 12, Formatter::rgbToUint32(255, 255, 255));
-		*/
-
 		game->updateAliens();
 		game->drawScore();
 		game->drawBullets();
